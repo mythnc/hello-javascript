@@ -4,3 +4,4 @@ http://eloquentjavascript.net/
 ch01 - Values, Types, and Operators
 ch02 - Program Structure
 ch03 - Functions
+ch04 - Data Structures: Objects and Arrays
