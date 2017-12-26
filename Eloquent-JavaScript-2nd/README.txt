@@ -8,3 +8,4 @@ ch04 - Data Structures: Objects and Arrays
 ch05 - Higher-Order Functions
 ch06 - The Secret Life of Objects
 ch07 - Project: Electronic Life
+ch08 - Bugs and Error Handling
