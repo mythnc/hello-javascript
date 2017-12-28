@@ -10,3 +10,4 @@ ch06 - The Secret Life of Objects
 ch07 - Project: Electronic Life
 ch08 - Bugs and Error Handling
 ch09 - Regular Expressions
+ch10 - Modules
