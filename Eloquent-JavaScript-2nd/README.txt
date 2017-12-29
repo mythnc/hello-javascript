@@ -13,3 +13,4 @@ ch09 - Regular Expressions
 ch10 - Modules
 ch11 - Project: A Programming Language
 ch12 - JavaScript and the Browser
+ch13 - The Document Object Model
