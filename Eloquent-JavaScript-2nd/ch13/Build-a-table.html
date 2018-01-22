@@ -1,0 +1,67 @@
+<style>
+  /* Defines a cleaner look for tables */
+  table  { border-collapse: collapse; }
+  td, th { border: 1px solid black; padding: 3px 8px; }
+  th     { text-align: left; }
+</style>
+
+<body></body>
+
+<!--table>
+  <tr>
+    <th>name</th>
+    <th>height</th>
+    <th>country</th>
+  </tr>
+  <tr>
+    <td>Kilimanjaro</td>
+    <td>5895</td>
+    <td>Tanzania</td>
+  </tr>
+</table-->
+
+<script>
+  var MOUNTAINS = [
+    {name: "Kilimanjaro", height: 5895, country: "Tanzania"},
+    {name: "Everest", height: 8848, country: "Nepal"},
+    {name: "Mount Fuji", height: 3776, country: "Japan"},
+    {name: "Mont Blanc", height: 4808, country: "Italy/France"},
+    {name: "Vaalserberg", height: 323, country: "Netherlands"},
+    {name: "Denali", height: 6168, country: "United States"},
+    {name: "Popocatepetl", height: 5465, country: "Mexico"}
+  ];
+
+  function buildTable(data) {
+    // Your code here.
+	var tableNode = document.createElement("table");
+	// Add hedader
+	var headerRowNode = document.createElement("tr");
+	var headers = Object.keys(MOUNTAINS[0]);
+	for (var headerName in headers) {
+	  var dataRowNode = document.createElement("th");
+	  var textNode = document.createTextNode(headers[headerName]);
+	  dataRowNode.appendChild(textNode);
+	  headerRowNode.appendChild(dataRowNode);
+	}
+	tableNode.appendChild(headerRowNode);
+	
+	// Add data row
+	for (var dataSet in MOUNTAINS) {
+	  // Add data
+	  var rowNode = document.createElement("tr");
+	  for (var data in MOUNTAINS[dataSet]) {
+	    var dataNode = document.createElement("td");
+		var textNode = document.createTextNode(MOUNTAINS[dataSet][data]);
+		if (typeof MOUNTAINS[dataSet][data] == "number") {
+		  dataNode.style.textAlign = "right";
+		}
+		dataNode.appendChild(textNode);
+		rowNode.appendChild(dataNode);
+	  }
+	  tableNode.appendChild(rowNode);
+	}
+	
+	return tableNode;
+  }
+  document.body.appendChild(buildTable(MOUNTAINS));
+</script>
