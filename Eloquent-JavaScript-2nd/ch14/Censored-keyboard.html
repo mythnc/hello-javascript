@@ -1,0 +1,15 @@
+<!doctype html>
+
+<input type="text">
+<script>
+  var field = document.querySelector("input");
+  // Your code here.
+  field.addEventListener("keypress", function(event) {
+    var keyCode = event.keyCode;
+    if (keyCode == "q".charCodeAt(0) 
+	    || keyCode == "w".charCodeAt(0) 
+		|| keyCode == "x".charCodeAt(0)) {
+		event.preventDefault();
+    }
+  });
+</script>
