@@ -1,0 +1,51 @@
+<!doctype html>
+<body>
+<div id="wrapper">
+  <div data-tabname="one">Tab one</div>
+  <div data-tabname="two">Tab two</div>
+  <div data-tabname="three">Tab three</div>
+</div>
+</body>
+<script>
+  function asTabs(node) {
+    // Your code here.
+	var tabsInfo = [];
+	node.childNodes.forEach(function(childNode) {
+	  if (childNode.nodeType == document.ELEMENT_NODE
+	      && childNode.tagName == "DIV") {
+	    tabsInfo.push(childNode);
+	  }
+	});
+	
+	var currentTab = null;
+    tabsInfo.forEach(function(tab, index) {
+	  var button = document.createElement("button");
+	  var text = tab.getAttribute("data-tabname");
+	  var buttonText = document.createTextNode(text);
+	  button.appendChild(buttonText);
+	  node.insertBefore(button, node.childNodes[index]);
+	  
+	  var defaultColor = button.style.background;
+	  button.addEventListener("click", function(event) {
+	    // button color
+		if (currentTab != null) {
+		  currentTab.style.background = "";
+		}
+		// tab content
+		var tabName = event.target.childNodes[0].nodeValue;
+	    tabsInfo.forEach(function(tab) {
+		  if (tab.getAttribute("data-tabname") == tabName) {
+		    tab.style.display = "";
+		  } else {
+		    tab.style.display = "none";
+		  }
+		});
+		currentTab = event.target;
+	    currentTab.style.background = "red";
+	  });
+	  var button = document.querySelector("button");
+	  button.click();
+	});
+  }
+  asTabs(document.querySelector("#wrapper"));
+</script>
