@@ -20,9 +20,7 @@
 	var currentTab = null;
     tabsInfo.forEach(function(tab, index) {
 	  var button = document.createElement("button");
-	  var text = tab.getAttribute("data-tabname");
-	  var buttonText = document.createTextNode(text);
-	  button.appendChild(buttonText);
+	  button.textContent = tab.getAttribute("data-tabname");
 	  node.insertBefore(button, node.childNodes[index]);
 	  
 	  var defaultColor = button.style.background;
