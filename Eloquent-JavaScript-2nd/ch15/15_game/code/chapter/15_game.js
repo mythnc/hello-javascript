@@ -301,6 +301,9 @@ var arrowCodes = {37: "left", 38: "up", 39: "right"};
 function trackKeys(codes) {
   var pressed = Object.create(null);
   function handler(event) {
+	if (pause) {
+	  return;
+	}
     if (codes.hasOwnProperty(event.keyCode)) {
       var down = event.type == "keydown";
       pressed[codes[event.keyCode]] = down;
@@ -328,6 +331,13 @@ function runAnimation(frameFunc) {
 }
 
 var arrows = trackKeys(arrowCodes);
+
+var pause = false;
+addEventListener("keyup", function(event) {
+  if (event.keyCode == 27) {
+	  pause = !pause;
+  }
+});
 
 function runLevel(level, Display, andThen) {
   var display = new Display(document.body, level);
