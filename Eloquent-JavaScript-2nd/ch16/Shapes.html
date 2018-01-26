@@ -1,0 +1,93 @@
+<!doctype html>
+
+<canvas width="900" height="600"></canvas>
+<script>
+  var cx = document.querySelector("canvas").getContext("2d");
+
+  // Your code here.
+  function drawTrapezoid(x, y, base1, base2, height) {
+    cx.beginPath();
+	cx.moveTo(x, y);
+	cx.lineTo(x + base1, y);
+	var pt = x + base1 + (base2 - base1) / 2.0;
+	cx.lineTo(pt, y + height);
+	cx.lineTo(pt - base2, y + height);
+	cx.closePath();
+	cx.stroke();
+  }
+
+  function drawDiamond(x, y, length, color) {
+    var distance = Math.sqrt(2 * length * length) / 2;
+	var centerX = x + distance;
+	var centerY = y + distance;
+    cx.beginPath();
+    cx.save();
+	cx.translate(x + length / 2, y + length / 2);
+    cx.rotate(0.25 * Math.PI);
+	cx.translate(-x - length / 2, -y - length / 2);
+    cx.moveTo(x, y);
+    cx.lineTo(x, y + length);
+    cx.lineTo(x + length, y + length);
+    cx.lineTo(x + length, y);
+    cx.closePath();
+    cx.fillStyle = color;
+    cx.fill();
+    cx.restore();
+  }
+  
+  function drawZigzaggingLine(x, y, length, height, times) {
+    cx.beginPath();
+	cx.moveTo(x, y);
+	for (var i = 0; i < times; i++) {
+	  var nextX = x + length * ((i + 1) % 2);
+	  var nextY = y + (height / 2) * (i + 1);
+	  cx.lineTo(nextX, nextY);
+	}
+	cx.stroke();
+  }
+  
+  function drawSpiral(x, y, radius) {
+	var arc = 0;
+	var arcInterval = 15.8 * Math.PI / 180;
+	
+    for (var i = 0; i < radius; i+=0.5) {
+	  cx.beginPath();
+	  cx.arc(x, y, radius - i, arc, arc+arcInterval);
+	  arc += arcInterval;
+	  //cx.closePath(); do not close path
+	  cx.stroke();
+	}
+  }
+  
+  function drawStar(x, y, color) {
+    cx.beginPath();
+	cx.save();
+	cx.translate(x, y);
+	cx.moveTo(50, 0);  
+	cx.quadraticCurveTo(0, 0, 35.3553, 35.3553);
+	cx.lineTo(35.3553, 35.3553);
+	cx.quadraticCurveTo(0, 0, 0, 50);
+	cx.lineTo(0, 50);
+	cx.quadraticCurveTo(0, 0, -35.3553, 35.3553);
+	cx.lineTo(-35.3553, 35.3553);
+	cx.quadraticCurveTo(0, 0, -50, 0);
+	cx.lineTo(-50, 0);
+	cx.quadraticCurveTo(0, 0, -35.3553, -35.3553);
+	cx.lineTo(-35.3553, -35.3553);
+	cx.quadraticCurveTo(0, 0, 0, -50);
+	cx.lineTo(0, -50);
+	cx.quadraticCurveTo(0, 0, 35.3553, -35.3553);
+	cx.lineTo(35.3553, -35.3553);
+	cx.quadraticCurveTo(0, 0, 50, 0);  
+	cx.closePath();
+	cx.fillStyle = color;
+	cx.fill();
+	cx.restore();
+  }
+  
+  drawTrapezoid(20, 30, 60, 100, 50);
+  drawDiamond(130, 25, 55, "red");
+  drawZigzaggingLine(220, 20, 100, 10, 12);
+  drawSpiral(400, 50, 50);
+  drawStar(525, 55, "brown");
+</script>
