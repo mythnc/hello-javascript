@@ -1,0 +1,47 @@
+<!doctype html>
+<canvas width="400" height="400"></canvas>
+<script>
+  var cx = document.querySelector("canvas").getContext("2d");
+
+  var lastTime = null;
+  function frame(time) {
+    if (lastTime != null)
+      updateAnimation(Math.min(100, time - lastTime) / 1000);
+    lastTime = time;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  var speed = new Vector(1, 2);
+  var ball = new Vector(50, 60);
+  
+  function updateAnimation(step) {
+    // Your code here.
+	cx.clearRect(0, 0, 400, 400);
+	cx.fillStyle = "black";
+	cx.lineWidth = 2;
+	cx.strokeRect(0, 0, 400, 400);
+	cx.beginPath();
+	cx.arc(ball.x, ball.y, 15, 0, 7);
+	cx.closePath();
+	cx.fillStyle = "red";
+	cx.fill();
+	if (ball.x - 15 < 0 || ball.x + 15 > 400) {
+	  speed.x *= -1;
+	}
+	if (ball.y - 15 < 0 || ball.y + 15 > 400) {
+	  speed.y *= -1;
+	}
+	ball = ball.plus(speed);
+	console.log(ball.x, ball.y);
+  }
+  
+  function Vector(x, y) {
+    this.x = x;
+	this.y = y;
+  }
+  Vector.prototype.plus = function(other) {
+    return new Vector(this.x + other.x, this.y + other.y);
+  };
+  
+</script>

@@ -16,3 +16,4 @@ ch12 - JavaScript and the Browser
 ch13 - The Document Object Model
 ch14 - Handling Events
 ch15 - Project: A Platform Game
+ch16 - Drawing on Canvas
