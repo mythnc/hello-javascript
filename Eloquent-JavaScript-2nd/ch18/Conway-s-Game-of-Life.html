@@ -1,0 +1,82 @@
+<!doctype html>
+<div id="grid"></div>
+<button id="next">Next generation</button>
+
+<script>
+  // Your code here.
+  var rows = 8;
+  var columns = 10;
+  var cells = [];
+  var next = document.querySelector("#next");
+  var grid = document.querySelector("#grid");
+  for (var i = 0; i < rows; i++) {
+    var row = [];
+    for (var j = 0; j < columns; j++) {
+      row.push(Math.random() >= 0.5);
+    }
+    cells.push(row);
+  }
+  
+  generateCheckboxs();
+  
+  function generateCheckboxs() {
+    grid.textConent = "";
+    cells.forEach(function (rows, rowsN) {
+      rows.forEach(function (cell, columnN) {
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = cell;
+        grid.appendChild(checkbox);
+        checkbox.addEventListener("change", function(event) {
+          cells[rowsN][columnN] = checkbox.checked;
+        });
+      });
+      grid.appendChild(document.createElement("br"));
+    });
+  }
+  
+  next.addEventListener("click", function(event) {
+    var newCells = [];
+    for (var i = 0; i < rows; i++) {
+      var row = [];
+      for (var j = 0; j < columns; j++) {
+        var neighbors_number = countNeighbors(i, j);
+        if (cells[i][j] && (neighbors_number > 3 || neighbors_number < 2)) {
+          row.push(false);
+        } else if (!cells[i][j] && neighbors_number == 3) {
+          row.push(true);
+        } else {
+          row.push(cells[i][j]);
+        }
+      }
+      newCells.push(row);
+    }
+    cells = newCells;
+    adjustCheckboxs();
+  });
+  
+  function adjustCheckboxs() {
+    var checkboxs = document.getElementsByTagName("input");
+    for (i = 0; i < rows; i++) {
+      for (j = 0; j < columns; j++) {
+        checkboxs[i * columns + j].checked = cells[i][j];
+      }
+    }
+  }
+  
+  function countNeighbors(row, column) {
+    var count = 0;
+    var neighborRow = [1, 1, 0, -1, -1, -1, 0, 1];
+    var neighborColumn = [0, 1, 1, 1, 0, -1, -1, -1];
+    for (var i = 0; i < 8; i++) {
+      var positionRow = neighborRow[i] + row;
+      var positionColumn = neighborColumn[i] + column;
+      if (positionColumn >= 0 && positionColumn < columns
+          && positionRow >= 0 && positionRow < rows
+          && cells[positionRow][positionColumn]) {
+        count += 1;
+      }
+    }
+    return count;
+  }
+</script>
