@@ -19,3 +19,4 @@ ch15 - Project: A Platform Game
 ch16 - Drawing on Canvas
 ch17 - HTTP
 ch18 - Forms and Form Fields
+ch19 - Project: A Paint Program
