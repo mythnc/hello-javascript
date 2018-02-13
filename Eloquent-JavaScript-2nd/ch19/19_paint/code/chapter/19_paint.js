@@ -226,3 +226,21 @@ tools.Rectangle = function(event, cx) {
     document.body.removeChild(rect);
   });
 };
+
+tools["Pick color"] = function(event, cx) {
+  // Your code here.
+  var pos = relativePos(event, cx.canvas);
+  var data = cx.getImageData(pos.x, pos.y, 1, 1);
+  console.log(data.data); // [0] ~ [4]
+};
+
+
+
+
+
+
+
+
+
+
+
