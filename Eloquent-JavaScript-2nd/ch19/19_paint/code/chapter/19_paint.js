@@ -197,3 +197,32 @@ function randomPointInRadius(radius) {
       return {x: x * radius, y: y * radius};
   }
 }
+
+tools.Rectangle = function(event, cx) {
+  // Your code here.
+  var outEvent = event;
+  var startPos = relativePos(event, cx.canvas);
+  var rect = elt("div");
+  rect.style.position = "absolute";
+  rect.style.backgroundColor = cx.fillStyle;
+  rect.style.left = event.clientX + "px";
+  rect.style.top = event.clientY + "px";
+  
+    rect.style.width = 0;
+    rect.style.height = 0;
+  document.body.appendChild(rect);
+  
+  trackDrag(function(event) {
+    var pos = relativePos(event, cx.canvas);
+    rect.style.width = Math.abs(pos.x - startPos.x) + "px";
+    rect.style.height = Math.abs(pos.y - startPos.y) + "px";
+    rect.style.left = Math.min(event.clientX, outEvent.clientX) + "px";
+    rect.style.top = Math.min(event.clientY, outEvent.clientY) + "px";
+  }, function(event) {
+    var pos = relativePos(event, cx.canvas);
+    var width = pos.x - startPos.x;
+    var height = pos.y - startPos.y;
+    cx.fillRect(startPos.x, startPos.y, width, height);
+    document.body.removeChild(rect);
+  });
+};
