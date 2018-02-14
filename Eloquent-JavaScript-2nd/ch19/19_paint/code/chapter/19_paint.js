@@ -15,9 +15,11 @@ function elt(name, attributes) {
 }
 
 var controls = Object.create(null);
+var canvasWidth = 500;
+var canvasHeight = 300;
 
 function createPaint(parent) {
-  var canvas = elt("canvas", {width: 500, height: 300});
+  var canvas = elt("canvas", {width: canvasWidth, height: canvasHeight});
   var cx = canvas.getContext("2d");
   var toolbar = elt("div", {class: "toolbar"});
   for (var name in controls)
@@ -231,16 +233,49 @@ tools["Pick color"] = function(event, cx) {
   // Your code here.
   var pos = relativePos(event, cx.canvas);
   var data = cx.getImageData(pos.x, pos.y, 1, 1);
-  console.log(data.data); // [0] ~ [4]
+  var rgb = "rgb(" + data.data[0] + ", " + data.data[1] + ", " + data.data[2] + ")";
+  cx.fillStyle = rgb;
+  cx.strokeStyle = rgb;
 };
 
+tools["Flood fill"] = function(event, cx) {
+  // Your code here.
+  var pos = relativePos(event, cx.canvas);
+  var data = cx.getImageData(pos.x, pos.y, 1, 1);
+  
+  cx.fillRect(pos.x, pos.y, 1, 1);
+  var stack = [];
+  pushToStack(pos.x, pos.y, stack, cx, data.data);
+  var count = 0;
+  while (stack.length > 0) {
+    // paint
+    stack.forEach(function(point) {
+      cx.fillRect(point[0], point[1], 1, 1);
+    });
+    if (count > 15)
+      break;
+    // pop & find
+    var newStack = [];
+    stack.forEach(function(point) {
+      pushToStack(point[0], point[1], newStack, cx, data.data);
+    });
+    stack = newStack;
+    count += 1;
+  }
+};
 
-
-
-
-
-
-
-
-
-
+function pushToStack(x, y, stack, cx, rgba) {
+  var neighborX = [1, 0, -1, 0];
+  var neighborY = [0, 1, 0, -1];
+  for (var i = 0; i < neighborX.length; i++) {
+    var currentX = x + neighborX[i];
+    var currentY = y + neighborY[i];
+    var currentRgba = cx.getImageData(currentX, currentY, 1, 1).data;
+    if (currentX >= 0 && currentX <= canvasWidth
+        && currentY >= 0 && currentY <= canvasHeight
+        && rgba[0] == currentRgba[0] && rgba[1] == currentRgba[1]
+        && rgba[2] == currentRgba[2] && rgba[3] == currentRgba[3]) {
+      stack.push([currentX, currentY]);
+    }
+  }
+}
