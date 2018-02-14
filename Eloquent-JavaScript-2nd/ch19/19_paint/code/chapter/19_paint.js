@@ -15,11 +15,9 @@ function elt(name, attributes) {
 }
 
 var controls = Object.create(null);
-var canvasWidth = 500;
-var canvasHeight = 300;
 
 function createPaint(parent) {
-  var canvas = elt("canvas", {width: canvasWidth, height: canvasHeight});
+  var canvas = elt("canvas", {width: 500, height: 300});
   var cx = canvas.getContext("2d");
   var toolbar = elt("div", {class: "toolbar"});
   for (var name in controls)
@@ -240,42 +238,37 @@ tools["Pick color"] = function(event, cx) {
 
 tools["Flood fill"] = function(event, cx) {
   // Your code here.
-  var pos = relativePos(event, cx.canvas);
-  var data = cx.getImageData(pos.x, pos.y, 1, 1);
+  var startPos = relativePos(event, cx.canvas);
+  var data = cx.getImageData(0, 0, cx.canvas.width, cx.canvas.height);
   
-  cx.fillRect(pos.x, pos.y, 1, 1);
-  var stack = [];
-  pushToStack(pos.x, pos.y, stack, cx, data.data);
-  var count = 0;
+  var stack = [startPos];
+  var alreadyFilled = new Array(cx.canvas.width * cx.canvas.height);
   while (stack.length > 0) {
     // paint
-    stack.forEach(function(point) {
-      cx.fillRect(point[0], point[1], 1, 1);
-    });
-    if (count > 15)
-      break;
-    // pop & find
-    var newStack = [];
-    stack.forEach(function(point) {
-      pushToStack(point[0], point[1], newStack, cx, data.data);
-    });
-    stack = newStack;
-    count += 1;
-  }
-};
-
-function pushToStack(x, y, stack, cx, rgba) {
-  var neighborX = [1, 0, -1, 0];
-  var neighborY = [0, 1, 0, -1];
-  for (var i = 0; i < neighborX.length; i++) {
-    var currentX = x + neighborX[i];
-    var currentY = y + neighborY[i];
-    var currentRgba = cx.getImageData(currentX, currentY, 1, 1).data;
-    if (currentX >= 0 && currentX <= canvasWidth
-        && currentY >= 0 && currentY <= canvasHeight
-        && rgba[0] == currentRgba[0] && rgba[1] == currentRgba[1]
-        && rgba[2] == currentRgba[2] && rgba[3] == currentRgba[3]) {
-      stack.push([currentX, currentY]);
+    var pos = stack.pop();
+    var index = pos.x + cx.canvas.width * pos.y;
+    if (alreadyFilled[index]) {
+      continue;
+    }
+    
+    cx.fillRect(pos.x, pos.y, 1, 1);
+    alreadyFilled[index] = true;
+  
+    var neighborX = [1, 1, 1, 0, 0, -1, -1, -1];
+    var neighborY = [1, 0, -1, 1, -1, 1, 0, -1];
+    for (var i = 0; i < neighborX.length; i++) {
+      var currentX = pos.x + neighborX[i];
+      var currentY = pos.y + neighborY[i];
+      var index1 = (startPos.x + data.width * startPos.y) * 4;
+      var index2 = (currentX + data.width * currentY) * 4;
+      if (currentX >= 0 && currentX < data.width
+          && currentY >= 0 && currentY < data.height
+          && data.data[index1 + 0] == data.data[index2 + 0]
+          && data.data[index1 + 1] == data.data[index2 + 1]
+          && data.data[index1 + 2] == data.data[index2 + 2]
+          && data.data[index1 + 3] == data.data[index2 + 3]) {
+        stack.push({x: currentX, y: currentY});
+      }
     }
   }
 }
